@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+  html,
+  body,
+  #root,
+  .app {
+    height: 100%;
+    width: 100%;
+    @apply bg-white text-sm dark:bg-black;
+  }
+
+  /* TIMELINE STYLING */
+  .timeline ._3_ygE {
+    @apply dark:border-stroke-dark rounded-tl-md border border-r-0 border-[#e6e4e4];
+  }
+  .timeline ._2eZzQ {
+    @apply dark:border-stroke-dark border-[#e6e4e4];
+  }
+  .timeline ._2dZTy {
+    @apply dark:fill-dark-secondary! fill-white;
+  }
+  .timeline ._2dZTy:nth-child(even) {
+    @apply dark:fill-dark-tertiary fill-[#f5f5f5];
+  }
+  .timeline ._35nLX {
+    @apply dark:fill-dark-secondary! dark:stroke-stroke-dark! fill-white stroke-[#e6e4e4];
+  }
+  .timeline ._9w8d5 {
+    @apply fill-[#333] dark:fill-white!;
+  }
+  .timeline ._34SS0 {
+    @apply dark:bg-dark-secondary! bg-white;
+  }
+  .timeline ._34SS0:nth-of-type(even) {
+    @apply dark:bg-dark-tertiary bg-[#f5f5f5];
+  }
+  .timeline ._RuwuK,
+  .timeline ._3rUKi,
+  .timeline ._1rLuZ {
+    @apply dark:stroke-stroke-dark stroke-[#e6e4e4];
+  }
+  .timeline ._3ZbQT {
+    @apply dark:border-stroke-dark border-l-0 border-[#e6e4e4];
+  }
+  .timeline ._3T42e {
+    @apply dark:bg-dark-bg bg-white;
+  }
+  .timeline ._29NTg {
+    @apply dark:text-neutral-500;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+}
+
+:root {
+  --white: #ffffff;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --blue-200: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --dark-bg: #101214;
+  --dark-secondary: #1d1f21;
+  --dark-tertiary: #3b3d40;
+  --blue-primary: #0275ff;
+  --stroke-dark: #2d3135;
+}
+
+@theme {
+  --color-white: var(--white);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-500: var(--gray-500);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-blue-200: var(--blue-200);
+  --color-blue-400: var(--blue-400);
+  --color-blue-500: var(--blue-500);
+  --color-dark-bg: var(--dark-bg);
+  --color-dark-secondary: var(--dark-secondary);
+  --color-dark-tertiary: var(--dark-tertiary);
+  --color-blue-primary: var(--blue-primary);
+  --color-stroke-dark: var(--stroke-dark);
+}
