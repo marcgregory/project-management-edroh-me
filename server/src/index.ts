@@ -36,9 +36,9 @@ app.use(`${config.BASE_PATH}/users`, userRoutes);
 app.use(`${config.BASE_PATH}/teams`, teamRoutes);
 
 //Server
-const port = config.PORT || 3000;
+const port = Number(config.PORT) || 3000;
 console.log(config.PORT);
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on port ${port}`);
 });
