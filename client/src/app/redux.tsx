@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   TypedUseSelectorHook,
@@ -20,6 +20,7 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  Persistor,
 } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
@@ -27,13 +28,13 @@ import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 /* REDUX PERSISTENCE */
 const createNoopStorage = () => {
   return {
-    getItem(_key: any) {
+    getItem() {
       return Promise.resolve(null);
     },
-    setItem(_key: any, value: any) {
+    setItem(_key: string, value: unknown) {
       return Promise.resolve(value);
     },
-    removeItem(_key: any) {
+    removeItem() {
       return Promise.resolve();
     },
   };
@@ -59,12 +60,15 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const makeStore = () => {
   return configureStore({
     reducer: persistedReducer,
-    middleware: (getDefault) =>
-      getDefault({
+    middleware: (getDefaultMiddleware) => {
+      const defaultMiddleware = getDefaultMiddleware({
         serializableCheck: {
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
-      }).concat(api.middleware),
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return defaultMiddleware.concat(api.middleware) as any;
+    },
   });
 };
 
@@ -81,15 +85,27 @@ export default function StoreProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const storeRef = useRef<AppStore>();
-  if (!storeRef.current) {
-    storeRef.current = makeStore();
-    setupListeners(storeRef.current.dispatch);
+  const storeRef = useRef<AppStore | null>(null);
+  const persistorRef = useRef<Persistor | null>(null);
+  const [store, setStore] = useState<AppStore | null>(null);
+  const [persistor, setPersistor] = useState<Persistor | null>(null);
+
+  useEffect(() => {
+    if (!storeRef.current) {
+      storeRef.current = makeStore();
+      setupListeners(storeRef.current.dispatch);
+      persistorRef.current = persistStore(storeRef.current);
+      setStore(storeRef.current);
+      setPersistor(persistorRef.current);
+    }
+  }, []);
+
+  if (!store || !persistor) {
+    return null;
   }
-  const persistor = persistStore(storeRef.current);
 
   return (
-    <Provider store={storeRef.current}>
+    <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         {children}
       </PersistGate>
