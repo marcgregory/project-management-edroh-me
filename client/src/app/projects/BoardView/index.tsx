@@ -1,6 +1,6 @@
 import { useGetTasksQuery, useUpdateTaskStatusMutation } from "@/src/state/api";
 
-import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { DndProvider, useDrag, useDrop, DropTargetMonitor, DragSourceMonitor } from "react-dnd";
 import { getEmptyImage, HTML5Backend } from "react-dnd-html5-backend";
 import { Task as TaskType } from "@/src/state/api";
 import { cn } from "@/src/lib/utils";
@@ -69,13 +69,13 @@ const TaskColumn = ({
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "task",
     drop: (item: { id: number }) => moveTask(item.id, status),
-    collect: (monitor: any) => ({
+    collect: (monitor: DropTargetMonitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
 
   const tasksCount = tasks.filter((task) => task.status === status).length;
-  const statusColor: any = {
+  const statusColor: Record<string, string> = {
     "To Do": "#2563EB",
     "Work In Progress": "#059669",
     "Under Review": "#D97706",
@@ -144,7 +144,7 @@ const Task = ({ task }: TaskProps) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
     item: { id: task.id },
-    collect: (monitor: any) => ({
+    collect: (monitor: DragSourceMonitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   }));
@@ -175,7 +175,7 @@ const Task = ({ task }: TaskProps) => {
     >
       {task.attachments && task.attachments.length > 0 && (
         <Image
-          src={`/${task.attachments[0].fileURL}`}
+          src={`https://pm-s3-imagesme.s3.ap-southeast-1.amazonaws.com/${task.attachments[0].fileURL}`}
           alt={task.attachments[0].fileName}
           width={400}
           height={200}
@@ -222,7 +222,7 @@ const Task = ({ task }: TaskProps) => {
               {task.assignee && (
                 <Image
                   key={task.assignee.userId}
-                  src={`/${task.assignee.profilePictureUrl!}`}
+                  src={`https://pm-s3-imagesme.s3.ap-southeast-1.amazonaws.com/${task.assignee.profilePictureUrl!}`}
                   alt={task.assignee.username}
                   width={30}
                   height={30}
@@ -232,7 +232,7 @@ const Task = ({ task }: TaskProps) => {
               {task.author && (
                 <Image
                   key={task.author.userId}
-                  src={`/${task.author.profilePictureUrl!}`}
+                  src={`https://pm-s3-imagesme.s3.ap-southeast-1.amazonaws.com/${task.author.profilePictureUrl!}`}
                   alt={task.author.username}
                   width={30}
                   height={30}
