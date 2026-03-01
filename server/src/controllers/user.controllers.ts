@@ -14,3 +14,29 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
       .json({ message: `Error retrieving users: ${error.message}` });
   }
 };
+
+export const postUser = async (req: Request, res: Response) => {
+  const prisma = new PrismaClient();
+
+  try {
+    const {
+      username,
+      cognitoId,
+      profilePictureUrl = "i1.jpg",
+      teamId = 1,
+    } = req.body;
+    const newUser = await prisma.user.create({
+      data: {
+        username,
+        cognitoId,
+        profilePictureUrl,
+        teamId,
+      },
+    });
+    res.json({ message: "User created Successfully", newUser });
+  } catch (error: any) {
+    res
+      .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
+      .json({ message: `Error retrieving users: ${error.message}` });
+  }
+};
