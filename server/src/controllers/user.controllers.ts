@@ -50,6 +50,7 @@ export const postUser = async (req: Request, res: Response) => {
         teamId,
       },
     });
+    console.log(JSON.stringify(newUser));
     res.json({ message: "User created Successfully", newUser });
   } catch (error: any) {
     res
