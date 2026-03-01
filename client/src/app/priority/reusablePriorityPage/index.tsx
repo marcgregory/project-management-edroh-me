@@ -1,5 +1,10 @@
 "use client";
-import { Priority, Task, useGetTasksByUserQuery } from "@/src/state/api";
+import {
+  Priority,
+  Task,
+  useGetAuthUserQuery,
+  useGetTasksByUserQuery,
+} from "@/src/state/api";
 import React, { useState } from "react";
 import { useAppSelector } from "../../redux";
 import ModalNewTask from "@/src/components/ModalNewTask";
@@ -70,7 +75,9 @@ const columns: GridColDef[] = [
 const ReusablePriorityPage = ({ priority }: Props) => {
   const [view, setView] = useState("list");
   const [isModalNewTasksOpen, setIsModalNewTasksOpen] = useState(false);
-  const userId = 1;
+  const { data: currentUser } = useGetAuthUserQuery({});
+  const userId = currentUser?.userDetails?.userId ?? null;
+
   const {
     data: tasks,
     isLoading,
