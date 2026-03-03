@@ -49,7 +49,7 @@ type AuthProviderProps = {
 const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <div className="mt-5">
-      <Authenticator formFields={formFields}>
+      <Authenticator variation="modal" formFields={formFields}>
         {({ user }) =>
           user ? (
             <div>{children}</div>

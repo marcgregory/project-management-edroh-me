@@ -98,3 +98,7 @@
   --color-blue-primary: var(--blue-primary);
   --color-stroke-dark: var(--stroke-dark);
 }
+
+[data-amplify-authenticator][data-variation="modal"] {
+  background-color: #fff !important;
+}
